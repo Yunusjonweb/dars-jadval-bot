@@ -90,57 +90,8 @@ mongo();
 bot.on("message", async (message) => {
   try {
     const userId = message.from.id;
-
-    let user = await model.findOne({
-      user_id: userId,
-    });
-
-    if (!user) {
-      user = await model.create({ user_id: userId, step: "name" });
-      await bot.sendMessage(userId, "Ismingizni kiriting");
-    } else {
-      if (user.step === "name") {
-        await model.findOneAndUpdate(
-          {
-            user_id: userId,
-          },
-          {
-            step: "phone_number",
-            name: message.text,
-          }
-        );
-        await bot.sendMessage(
-          userId,
-          message.text + ", telefon raqamingizni qoldiring",
-          {
-            reply_markup: {
-              keyboard: [
-                [
-                  {
-                    text: "Kontakt Yuborish",
-                    request_contact: true,
-                  },
-                ],
-              ],
-              resize_keyboard: true,
-            },
-          }
-        );
-      } else if (user.step === "phone_number" && message.contact) {
-        await model.findOneAndUpdate(
-          {
-            user_id: userId,
-          },
-          {
-            step: "full",
-            phone_number: message.contact.phone_number,
-          }
-        );
-        await bot.sendMessage(userId, "Ro'yxatdan o'tdingiz!!!");
-      } else if (user.step === "full") {
-        await bot.sendMessage(userId, "Yunusbek Xabibullayev");
-      }
-    }
+    const text = message.text;
+    bot.sendMessage(userId, `Assalomu alaykum ${text}`);
   } catch (e) {
     console.log(e);
   }
